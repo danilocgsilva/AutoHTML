@@ -6,33 +6,32 @@ import org.omg.CORBA.OBJECT_NOT_EXIST;
 
 public class Utils {
 	
-	public static void criaPasta(String caminhoPasta) {
-		try {
-			new File(caminhoPasta).mkdirs();
-		} catch (Exception ex) {
-			ex.getMessage();
-		}
-	}
 	
 	public static void criaArquivo(String caminhoArquivo, String conteudoArquivo) {
 		
+		// Joga uma exceção quando tenta se prover um valor com '\\' no início
 		if (caminhoArquivo.charAt(0) == '\\' || caminhoArquivo.charAt(1) == '\\') {
 			throw new AutoHTMLException("Não é permitido um caminho em que o primeiro caractere seja.");
 		}
 		
+		// Joga uma exceção quando tenta se prover um valor com '\\' no final
 		if (caminhoArquivo.charAt(caminhoArquivo.length() - 1) == '\\' || caminhoArquivo.charAt(caminhoArquivo.length() - 2) == '\\') {
 			throw new AutoHTMLException("Foi fornecido um caminho. Deve ser um arquivo.");
 		}
 		
-		String[] fragmentosCaminho = caminhoArquivo.split(caminhoArquivo);
+		String[] partesCaminho = caminhoArquivo.split("\\\\");
+		String nomeArquivo = partesCaminho[partesCaminho.length - 1];
+		String mkdirsString = caminhoArquivo.replaceAll(nomeArquivo + "$", "");
+		File arquivo = new File(caminhoArquivo);
 		
-		try {
+		try {	
 			
-			if (fragmentosCaminho.length > 1) {
-				for (int i = 0; i < fragmentosCaminho.length - 2; i++) {
-					
-				}
-			}
+			new File(mkdirsString).mkdirs();
+			arquivo.createNewFile();
+			FileWriter fWriter = new FileWriter(arquivo);
+			BufferedWriter bWriter = new BufferedWriter(fWriter);
+			bWriter.write(conteudoArquivo);
+			bWriter.close();
 			
 		} catch (Exception e) {
 			
@@ -41,28 +40,18 @@ public class Utils {
 		}
 	}
 	
-	public static void testeArr() {
-		String caminho1 = "danilo\\subpasta\\texto.txt";
-		String caminho2 = "texto.txt";
-		String caminho3 = "danilo\\subpasta\\";
-		String caminho4 = "\\danilo\\subpasta\\";
-		
-		String[] frag1 = caminho1.split("\\\\");
-		String[] frag2 = caminho2.split("\\\\");
-		String[] frag3 = caminho3.split("\\\\");
-		String[] frag4 = caminho4.split("\\\\");
-		
-		System.out.println("Elementos em frag1: " + frag1.length + ". Último elemento: " + frag1[frag1.length - 1] + ". Primeiro elemento: " + frag1[0]);
-		System.out.println("Elementos em frag2: " + frag2.length + ". Último elemento: " + frag2[frag2.length - 1] + ". Primeiro elemento: " + frag2[0]);
-		System.out.println("Elementos em frag3: " + frag3.length + ". Último elemento: " + frag3[frag3.length - 1] + ". Primeiro elemento: " + frag3[0]);
-		System.out.println("Elementos em frag4: " + frag4.length + ". Último elemento: " + frag4[frag4.length - 1] + ". Primeiro elemento: " + frag4[0]);
-		
-	}
 	
-	public static void testeString() {
-		String ovo = "DaniloSilva";
-		System.out.println("Character na posição 1: " + ovo.charAt(0));
-		System.out.println("Character na posição 2: " + ovo.charAt(1));
+	
+	public static void criaProjeto(String nomeProjeto) {
+		
+		String conteudoHTML = "<h1>oi mundo!</h1>";
+		String conteudoJS = "function olaMundo() { alert('Olá mundo') }";
+		String conteudoCSS = "body {\n\n}";
+		
+		criaArquivo("Projetos\\" + nomeProjeto + "\\index.html", conteudoHTML);
+		criaArquivo("Projetos\\" + nomeProjeto + "\\css\\style.css", conteudoCSS);
+		criaArquivo("Projetos\\" + nomeProjeto + "\\js\\scripts.js", conteudoJS);
+		
 	}
 	
 }
