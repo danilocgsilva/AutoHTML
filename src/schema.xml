@@ -1,0 +1,5 @@
+<botoes>
+	<botao ID="btnNome">
+		<titulo>Inserir Nome</titulo></botao>
+	<botao ID="btnTelefone">
+		<titulo>Inserir Telefone</titulo></botao></botoes>
